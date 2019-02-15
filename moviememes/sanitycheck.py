@@ -39,3 +39,4 @@ def run_sanity_checks():
     for sanity_check in SANITY_CHECKS:
         sanity_check()
         print()
+    print("Sanity checks complete")

@@ -6,9 +6,12 @@ RUN apt-get install -y ffmpeg
 
 RUN python -m pip install pipenv
 
-COPY . /var/movie-meme-generator/
 WORKDIR /var/movie-meme-generator
+COPY Pipfile .
+COPY Pipfile.lock .
 
 RUN pipenv install
+
+COPY . .
 
 ENTRYPOINT [ "pipenv", "run", "python", "movie-meme-generator.py" ]
