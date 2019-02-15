@@ -16,7 +16,8 @@ def requests_check():
 def ffmpeg_check():
     print("Testing ffmpeg availability...")
     try:
-        subprocess.check_call(['ffmpeg', '-version'])
+        output = subprocess.check_output(['ffmpeg', '-version'])
+        print(output)
         print("OK")
     except Exception as e:
         print("ERROR running `ffmpeg -version`")
