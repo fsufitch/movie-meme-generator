@@ -3,6 +3,7 @@ import os, pprint, shutil
 from .caption import caption
 from .config import build_config
 from .context import Context
+from .imgur import imgur_upload
 from .logging import build_logger
 from .screencap import get_screencap
 from .timestamp import pick_timestamp
@@ -55,7 +56,13 @@ def run_interactive(context):
     context.logger.info(f"Created output file: {context.config['output']['filename']}")
 
     if context.config['output']['imgur']['enabled']:
-        context.logger.error('Imgur output not yet supported')
+        upload_url = imgur_upload(context, screencap_file)
+
+    if upload_url:
+        context.logger.info(f"Uploaded to Imgur at: {upload_url}")
+    else:
+        context.logger.info(f"Failed Imgur upload, aborting")
+        return
 
     if context.config['output']['reddit']['enabled']:
         context.logger.error('Reddit output not yet supported')
@@ -75,7 +82,13 @@ def run_script(context):
     context.logger.info(f"Created output file: {context.config['output']['filename']}")
 
     if context.config['output']['imgur']['enabled']:
-        context.logger.error('Imgur output not yet supported')
+        upload_url = imgur_upload(context, screencap_file)
+
+    if upload_url:
+        context.logger.info(f"Uploaded to Imgur at: {upload_url}")
+    else:
+        context.logger.info(f"Failed Imgur upload, aborting")
+        return
 
     if context.config['output']['reddit']['enabled']:
         context.logger.error('Reddit output not yet supported')
