@@ -3,7 +3,7 @@ from pkg_resources import resource_filename
 
 from .context import Context
 
-IMPACT_FONT = ImageFont.truetype(resource_filename(__name__, 'impact.ttf'), 32)
+IMPACT_FONT = ImageFont.truetype(resource_filename(__name__, 'impact.ttf'), 42)
 RESIZE_WIDTH = 1080
 
 def caption(context: Context, image_path: str, text: str):
