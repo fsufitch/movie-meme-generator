@@ -9,6 +9,10 @@ verify_ssl = true
 requests = ">=2.20.1"
 pyyaml = ">=4.2b1"
 pillow = ">=5.4.1"
+srt = ">=1.10"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

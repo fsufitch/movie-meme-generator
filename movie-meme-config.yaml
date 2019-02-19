@@ -1,10 +1,10 @@
 mode: interactive  # 'interactive', 'script', or 'daemon'; can be overriden by CLI arg
+log-level: info  # 'debug', 'info', 'error'
 
 sources:
-  # example
-  sw_1:
-    video: resources/thephantommenace.avi
-    subs: resources/thephantommenace.sub
+  sample:
+    video: resources/SampleVideo_360x240_5mb.mp4
+    subs: resources/SampleVideo.srt
 
 output:
   filename: output.jpg
@@ -13,7 +13,6 @@ output:
     enabled: true
     # See: https://apidocs.imgur.com/#c85c9dfc-7487-4de2-9ecd-66f727cf3139    
     client-id: XXX-PLACEHOLDER-XXX
-    api-url: https://api.imgur.com/3
   
   reddit:
     enabled: true  # also requires imgur enabled

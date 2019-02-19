@@ -14,4 +14,4 @@ RUN pipenv install
 
 COPY . .
 
-ENTRYPOINT [ "pipenv", "run", "python", "movie-meme-generator.py" ]
+ENTRYPOINT [ "pipenv", "run", "python", "movie-meme-generator.py", "movie-meme-config.yaml", "-m", "script"]

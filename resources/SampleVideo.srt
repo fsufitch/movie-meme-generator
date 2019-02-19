@@ -1,0 +1,23 @@
+1
+00:00:01,000 --> 00:00:10,200
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae orci massa.
+
+2
+00:00:11,000 --> 00:00:20,200
+Etiam pulvinar tempus libero id interdum.
+
+3
+00:00:21,000 --> 00:00:30,200
+Nunc neque leo, sollicitudin id euismod a, placerat nec leo.
+
+4
+00:00:31,000 --> 00:00:40,200
+Phasellus ut fermentum nunc, vitae feugiat ex. Aenean velit neque, scelerisque elementum pellentesque vitae, consectetur vel nulla.
+
+5
+00:00:41,000 --> 00:00:50,200
+Integer vitae orci massa.
+
+6
+00:00:51,000 --> 00:00:60,200
+Nulla nec nisi at augue tincidunt mattis.
