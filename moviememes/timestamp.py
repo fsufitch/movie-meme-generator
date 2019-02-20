@@ -21,7 +21,7 @@ class Timestamp:
 def pick_timestamp(context: Context) -> Timestamp:
     source_id = random.choice(list(context.config['sources'].keys()))
     context.logger.debug(f"Picked source {source_id}, reading SRT")    
-    with open(context.config['sources'][source_id]['subs']) as f:
+    with open(context.config['sources'][source_id]['srt']) as f:
         srt_data = f.read()
     subs = list(srt.parse(srt_data))
     context.logger.debug("SRT parsed successfully")

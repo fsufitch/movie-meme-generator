@@ -2,9 +2,15 @@ mode: interactive  # 'interactive', 'script'; can be overriden by CLI arg
 log-level: info  # 'debug', 'info', 'error'
 
 sources:
-  sample:
-    video: resources/SampleVideo_360x240_5mb.mp4
-    srt: resources/SampleVideo.srt
+  sw1:
+    video: resources/sw-ep1.mp4
+    srt: resources/sw-ep1.srt
+  sw2:
+    video: resources/sw-ep2.mkv
+    srt: resources/sw-ep2.srt
+  sw3:
+    video: resources/sw-ep3.mp4
+    srt: resources/sw-ep3.srt
 
 output:
   filename: output.jpg
@@ -12,4 +18,4 @@ output:
   imgur:
     enabled: true
     # See: https://apidocs.imgur.com/#c85c9dfc-7487-4de2-9ecd-66f727cf3139    
-    client-id: XXX-PLACEHOLDER-XXX
+    client-id: 3215757dc5843d5

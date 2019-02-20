@@ -19,23 +19,13 @@ def build_empty_config() -> MovieMemeConfig:
                 'enabled': True,
                 'client-id': None,
             },
-            'reddit': {
-                'enabled': True,
-                'client-id': None,
-                'client-secret': None,
-                'username': None,
-                'password': None,
-            },
         },
-        'daemon': {
-            'interval-seconds': None,
-        }
     })
 
 def build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Make random memes out of movies/subtitles")
     parser.add_argument('config_file', metavar='CONFIG_FILE', type=argparse.FileType('r'))
-    parser.add_argument('-m', '--mode', type=str, choices=['interactive', 'script', 'daemon'],
+    parser.add_argument('-m', '--mode', type=str, choices=['interactive', 'script'],
         help="Mode to run in; overrides value in config file")
 
     verbosity_group = parser.add_mutually_exclusive_group()
@@ -46,9 +36,6 @@ def build_argument_parser() -> argparse.ArgumentParser:
     imgur_toggle_group.add_argument('--enable-imgur', action='store_true', dest='imgur_enabled', default=None)
     imgur_toggle_group.add_argument('--disable-imgur', action='store_false', dest='imgur_enabled', default=None)
 
-    reddit_toggle_group = parser.add_mutually_exclusive_group()
-    reddit_toggle_group.add_argument('--enable-reddit', action='store_true', dest='reddit_enabled', default=None)
-    reddit_toggle_group.add_argument('--disable-reddit', action='store_false', dest='reddit_enabled', default=None)
     return parser
 
 def parse_args(args: [str]) -> MovieMemeConfig:
@@ -100,10 +87,10 @@ def verify_config(config: MovieMemeConfig):
             raise InvalidMemeConfigException(f"Source `{source_id}` has no `video`")
         if not os.path.isfile(source_data['video']):
             raise InvalidMemeConfigException(f"Source `{source_id}` has a `video` that does not exist")
-        if not source_data['subs']:
-            raise InvalidMemeConfigException(f"Source `{source_id}` has no `subs`")
-        if not os.path.isfile(source_data['subs']):
-            raise InvalidMemeConfigException(f"Source `{source_id}` has a `subs` that does not exist")
+        if not source_data['srt']:
+            raise InvalidMemeConfigException(f"Source `{source_id}` has no `srt`")
+        if not os.path.isfile(source_data['srt']):
+            raise InvalidMemeConfigException(f"Source `{source_id}` has a `srt` that does not exist")
     
     if not config['output']['filename']:
         raise InvalidMemeConfigException("No output filename resolved")
@@ -111,19 +98,3 @@ def verify_config(config: MovieMemeConfig):
     if config['output']['imgur']['enabled']:
         if not config['output']['imgur']['client-id']:
             raise InvalidMemeConfigException("Imgur enabled, but no client-id resolved")
-
-    if config['output']['reddit']['enabled']:
-        if not config['output']['reddit']['client-id']:
-            raise InvalidMemeConfigException("Reddit enabled, but no client-id resolved")
-        if not config['output']['reddit']['client-secret']:
-            raise InvalidMemeConfigException("Reddit enabled, but no client-secret resolved")
-        if not config['output']['reddit']['username']:
-            raise InvalidMemeConfigException("Reddit enabled, but no username resolved")
-        if not config['output']['reddit']['password']:
-            raise InvalidMemeConfigException("Reddit enabled, but no password resolved")
-
-    if config['mode'] == 'daemon':
-        if not config['daemon']['interval-seconds']:
-            raise InvalidMemeConfigException("Daemon mode enabled, but no daemon interval resolved")
-
-       

@@ -22,16 +22,17 @@ def main(argv: [str]):
     elif context.config['mode'] == 'script':
         run_script(context)
     else:
-        logger.error('Runtime mode not yet supported')
+        logger.error('Runtime mode not supported')
 
     context.cleanup()
 
 def run_interactive(context):
     import webbrowser
 
-    attempt_number = 1
+    attempt_number = 0
 
     while True:
+        attempt_number += 1
         context.logger.info(f"Attempt #{attempt_number}")
         timestamp = pick_timestamp(context)
 
@@ -56,16 +57,14 @@ def run_interactive(context):
     context.logger.info(f"Created output file: {context.config['output']['filename']}")
 
     if context.config['output']['imgur']['enabled']:
-        upload_url = imgur_upload(context, screencap_file)
+        upload_url = imgur_upload(context, working_file)
 
     if upload_url:
         context.logger.info(f"Uploaded to Imgur at: {upload_url}")
+        webbrowser.open_new_tab(upload_url)
     else:
         context.logger.info(f"Failed Imgur upload, aborting")
         return
-
-    if context.config['output']['reddit']['enabled']:
-        context.logger.error('Reddit output not yet supported')
 
 def run_script(context):
     timestamp = pick_timestamp(context)
@@ -89,6 +88,3 @@ def run_script(context):
     else:
         context.logger.info(f"Failed Imgur upload, aborting")
         return
-
-    if context.config['output']['reddit']['enabled']:
-        context.logger.error('Reddit output not yet supported')
