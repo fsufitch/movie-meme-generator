@@ -48,8 +48,6 @@ def parse_args(args: [str]) -> MovieMemeConfig:
     config['log-level'] = values.verbosity or config.get('log-level')
     if values.imgur_enabled is not None:
         config['output']['imgur']['enabled'] = values.imgur_enabled
-    if values.reddit_enabled is not None:
-        config['output']['reddit']['enabled'] = values.reddit_enabled
     
     return config
     
