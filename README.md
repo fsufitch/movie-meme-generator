@@ -7,6 +7,8 @@ community, who believe that there every line in the Star Wars prequels can be a
 meme, this script can pull screenshots from any movie and pair them with an 
 associated subtitle to create a "meme".
 
+**[See it live here!](http://ec2-35-174-113-230.compute-1.amazonaws.com/meme)**
+
 ![This is where the fun begins](README-images/wherethefunbegins.jpg)
 
 Installation (Native)
