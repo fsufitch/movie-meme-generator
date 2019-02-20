@@ -11,6 +11,8 @@ pyyaml = ">=4.2b1"
 pillow = ">=5.4.1"
 srt = ">=1.10"
 imgurpython = "*"
+flask = "*"
+uwsgi = "*"
 
 [requires]
 python_version = "3.7"

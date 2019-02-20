@@ -14,6 +14,8 @@ class Context:
         if self.cleaned_up:
             return
         self.logger.info("Cleaning up runtime context")
-        self.config['config-file'].close()
+        if 'config-file' in self.config:
+            self.config['config-file'].close()
         self.workdir.cleanup()
         self.cleaned_up = True
+
