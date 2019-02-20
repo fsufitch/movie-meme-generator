@@ -59,7 +59,22 @@ generate memes is:
 1. Place your movies/subtitles in the `resources/` directory
 2. Edit [`movie-meme-config.yaml`](./movie-meme-config.yaml) to reference and
    use those files 
-3. Run `./docker_build_run.sh`
+3. Run `./docker_build_run_script.sh`
 
 Interactive mode is not supported with Docker, as it requires access to
 your web browser.
+
+Web Server (Docker)
+-----
+
+You can also stand up a simple web server that creates memes over and over:
+
+1. Place your movies/subtitles in the `resources/` directory
+2. Edit [`movie-meme-config.yaml`](./movie-meme-config.yaml) to reference and
+   use those files 
+3. Run `./docker_build_run_server.sh`
+4. Find your server at `http://localhost:8080`
+
+> If you want to run the server without Docker, you're on your own
+
+![](README-images/beep.jpg)
