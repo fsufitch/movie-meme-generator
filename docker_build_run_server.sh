@@ -1,4 +1,8 @@
 #!/bin/sh
 
-docker build -f Dockerfile.server -t moviememes . || exit 1
-docker run --rm --name moviememes -p 8080:8080 moviememes || exit 1
+PORT=${PORT:-8080}
+
+docker build -f Dockerfile.server -t moviememes:server . || exit 1
+docker run --rm --name moviememes-server -p $PORT:8080 \
+    -v $(readlink -f ./resources):/app/resources \
+    moviememes:server || exit 1

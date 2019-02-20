@@ -12,6 +12,8 @@ COPY Pipfile.lock .
 
 RUN pipenv install -v
 
-COPY . .
+COPY moviememes moviememes
+COPY movie-meme-config.yaml .
+COPY movie-meme-generator.py .
 
 ENTRYPOINT [ "pipenv", "run", "python", "movie-meme-generator.py", "movie-meme-config.yaml", "-m", "script"]

@@ -12,6 +12,10 @@ COPY Pipfile.lock .
 
 RUN pipenv install -v
 
-COPY . .
+COPY moviememes moviememes
+COPY movie-meme-config.yaml .
+COPY movie-meme-generator.py .
+COPY webapp.py .
+COPY uwsgi.ini .
 
 ENTRYPOINT ["pipenv", "run", "uwsgi", "--ini", "uwsgi.ini"]
