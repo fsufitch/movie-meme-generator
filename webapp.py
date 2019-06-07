@@ -41,12 +41,15 @@ def meme():
     hour = flask.request.args.get('hour')
     minute = flask.request.args.get('minute')
     second = flask.request.args.get('second')
+    id = flask.request.args.get('id')
     if (hour != None or minute != None or second != None):
         hour = int(hour) if hour is not None else 0
         minute = int(minute) if minute is not None else 0
         second = int(second) if second is not None else 0
         time = timedelta(hours=hour, minutes=minute, seconds=second)
-        timestamp = get_timestamp_by_timedelta(context, time)
+        timestamp = get_timestamp_by_timedelta(context, timestamp=time, id=id)
+    elif id is not None:
+        timestamp = get_timestamp_by_timedelta(context, id=id)
     else:
         timestamp = pick_timestamp(context)
 

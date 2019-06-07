@@ -31,16 +31,23 @@ def pick_timestamp(context: Context) -> Timestamp:
     return Timestamp(source_id, subtitle)
 
 
-def get_timestamp_by_timedelta(context: Context, timestamp: timedelta):
-    source_id = random.choice(list(context.config['sources'].keys()))
-    context.logger.debug(f"Picked source {source_id}, reading SRT")
-    with open(context.config['sources'][source_id]['srt']) as f:
+def get_timestamp_by_timedelta(context: Context, timestamp: timedelta = None, id: str = None):
+    if id is not None:
+        source_key = context.get_source_key_by_id(id)
+    else:
+        source_key = random.choice(list(context.config['sources'].keys()))
+        context.logger.debug(f"Picked source {source_key}, reading SRT")
+
+    if source_key is None:
+        return None
+
+    with open(context.config['sources'][source_key]['srt']) as f:
         srt_data = f.read()
     subs = list(srt.parse(srt_data))
     context.logger.debug("SRT parsed successfully")
     sub = get_subtitle_by_timedelta(subs, timestamp)
     if sub is not None:
-        return Timestamp(source_id, sub)
+        return Timestamp(source_key, sub)
     else:
         return None
 

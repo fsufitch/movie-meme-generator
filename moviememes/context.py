@@ -19,3 +19,11 @@ class Context:
         self.workdir.cleanup()
         self.cleaned_up = True
 
+    def get_source_key_by_id(self, key):
+        for source_key, source in self.config['sources'].items():
+            if 'id' in source and source['id'] == key:
+                self.logger.debug(f"Found source {source_key}, reading SRT")
+                return source_key
+
+        # If key not found, return None
+        return None

@@ -5,6 +5,7 @@ sources:
   sample:
     video: resources/SampleVideo_360x240_5mb.mp4
     srt: resources/SampleVideo.srt
+    id: SampleVideo
 
 output:
   filename: output.jpg
