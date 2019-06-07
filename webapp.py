@@ -1,11 +1,12 @@
 import flask, pprint
 from pkg_resources import resource_filename
+from datetime import timedelta
 
 from moviememes.caption import caption
 from moviememes.config import read_config_file
 from moviememes.context import Context
 from moviememes.logging import build_logger
-from moviememes.timestamp import pick_timestamp
+from moviememes.timestamp import pick_timestamp, get_timestamp_by_timedelta
 from moviememes.screencap import get_screencap
 
 config_file = './movie-meme-config.yaml'
@@ -36,8 +37,27 @@ def meme():
     context = Context(config, logger)
     context.logger.info(f"Processing request using workdir f{context.workdir}")
 
-    timestamp = pick_timestamp(context)
-    screencap_file = get_screencap(context, timestamp)
-    caption(context, screencap_file, timestamp.get_text())
+    # get hour, minute, and seconds from the url if it's present
+    hour = flask.request.args.get('hour')
+    minute = flask.request.args.get('minute')
+    second = flask.request.args.get('second')
+    if (hour != None or minute != None or second != None):
+        hour = int(hour) if hour is not None else 0
+        minute = int(minute) if minute is not None else 0
+        second = int(second) if second is not None else 0
+        time = timedelta(hours=hour, minutes=minute, seconds=second)
+        timestamp = get_timestamp_by_timedelta(context, time)
+    else:
+        timestamp = pick_timestamp(context)
 
-    return flask.send_file(screencap_file)
+    if timestamp is not None:
+        screencap_file = get_screencap(context, timestamp)
+        caption(context, screencap_file, timestamp.get_text())
+
+        return flask.send_file(screencap_file)
+    else:
+        response = flask.jsonify({
+            "message": "Could not find source or timestamp."
+        })
+        response.status_code = 404
+        return response
