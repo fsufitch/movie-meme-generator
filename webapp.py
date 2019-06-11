@@ -6,7 +6,7 @@ from moviememes.caption import caption
 from moviememes.config import read_config_file
 from moviememes.context import Context
 from moviememes.logging import build_logger
-from moviememes.timestamp import pick_timestamp, get_timestamp_by_timedelta
+from moviememes.timestamp import pick_timestamp, get_timestamp_by_params
 from moviememes.screencap import get_screencap
 
 config_file = './movie-meme-config.yaml'
@@ -34,6 +34,14 @@ def sources():
 
 @app.route('/meme')
 def meme():
+    # Specify allowed parameters for this request
+    ALLOWED_PARAMS = [
+        'hour',
+        'minute',
+        'second',
+        'id',
+        'tag'
+    ]
     context = Context(config, logger)
     context.logger.info(f"Processing request using workdir f{context.workdir}")
 
@@ -42,16 +50,36 @@ def meme():
     minute = flask.request.args.get('minute')
     second = flask.request.args.get('second')
     id = flask.request.args.get('id')
+    tag = flask.request.args.get('tag')
+
+    for arg in flask.request.args:
+        if arg not in ALLOWED_PARAMS:
+            response = flask.jsonify({
+                "message": "'{}' is not an allowed path parameter".format(arg)
+            })
+            response.status_code = 400
+            return response
+
+    # Disallow the caller to specify a tag and an ID.
+    if id is not None and tag is not None:
+        response = flask.jsonify({
+            "message": "You must specify an ID or tag, but not both"
+        })
+        response.status_code = 404
+        return response
+
+    # Calculate the timestamp if any elements were included
     if (hour != None or minute != None or second != None):
         hour = int(hour) if hour is not None else 0
         minute = int(minute) if minute is not None else 0
         second = int(second) if second is not None else 0
         time = timedelta(hours=hour, minutes=minute, seconds=second)
-        timestamp = get_timestamp_by_timedelta(context, timestamp=time, id=id)
-    elif id is not None:
-        timestamp = get_timestamp_by_timedelta(context, id=id)
     else:
-        timestamp = pick_timestamp(context)
+        time = None
+
+    # Get the Timestamp object given the params specified by the user.
+    # If no params were passed, it gets a random timestamp.
+    timestamp = get_timestamp_by_params(context, timestamp=time, id=id, tag=tag)
 
     if timestamp is not None:
         screencap_file = get_screencap(context, timestamp)
@@ -64,3 +92,6 @@ def meme():
         })
         response.status_code = 404
         return response
+
+if __name__ == "__main__":
+    app.run(debug=True)

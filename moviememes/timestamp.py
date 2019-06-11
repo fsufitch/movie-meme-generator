@@ -7,18 +7,23 @@ from srt import Subtitle
 from .context import Context
 
 class Timestamp:
-    def __init__(self, source_id: str, subtitle: srt.Subtitle):
+    def __init__(self, source_id: str, subtitle: srt.Subtitle, time: timedelta = None):
         self.source_id = source_id
         self.subtitle = subtitle
+        self.time = time
 
     def get_text(self):
         return self.subtitle.content
 
     def get_time_seconds(self):
-        return random.uniform(
-            self.subtitle.start.total_seconds(),
-            self.subtitle.end.total_seconds(),
-        )
+        # Gets the time of the timestamp in seconds. If the time is not set, it picks a random time from the subtitle.
+        if self.time is None:
+            return random.uniform(
+                self.subtitle.start.total_seconds(),
+                self.subtitle.end.total_seconds(),
+            )
+        else:
+            return self.time.total_seconds()
 
 def pick_timestamp(context: Context) -> Timestamp:
     source_id = random.choice(list(context.config['sources'].keys()))
@@ -31,12 +36,20 @@ def pick_timestamp(context: Context) -> Timestamp:
     return Timestamp(source_id, subtitle)
 
 
-def get_timestamp_by_timedelta(context: Context, timestamp: timedelta = None, id: str = None):
+def get_timestamp_by_params(context: Context, timestamp: timedelta = None, id: str = None, tag: str = None):
     if id is not None:
         source_key = context.get_source_key_by_id(id)
+        context.logger.debug(f"Picked source {source_key} by ID, reading SRT")
+    elif tag is not None:
+        source_keys = context.get_sources_by_tag(tag)
+        if (len(source_keys) > 0):
+            source_key = random.choice(source_keys)
+        else:
+            source_key = None
+        context.logger.debug(f"Picked source {source_key} by TAG, reading SRT")
     else:
         source_key = random.choice(list(context.config['sources'].keys()))
-        context.logger.debug(f"Picked source {source_key}, reading SRT")
+        context.logger.debug(f"Picked source {source_key} at RANDOM, reading SRT")
 
     if source_key is None:
         return None
@@ -45,9 +58,13 @@ def get_timestamp_by_timedelta(context: Context, timestamp: timedelta = None, id
         srt_data = f.read()
     subs = list(srt.parse(srt_data))
     context.logger.debug("SRT parsed successfully")
-    sub = get_subtitle_by_timedelta(subs, timestamp)
+    if timestamp is not None:
+        sub = get_subtitle_by_timedelta(subs, timestamp)
+    else:
+        sub = random.choice(subs)
+
     if sub is not None:
-        return Timestamp(source_key, sub)
+        return Timestamp(source_key, sub, timestamp)
     else:
         return None
 

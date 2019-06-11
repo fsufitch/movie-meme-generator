@@ -27,3 +27,9 @@ class Context:
 
         # If key not found, return None
         return None
+
+    def get_sources_by_tag(self, tag):
+        return [
+            source_key for source_key, source in self.config['sources'].items()
+            if 'tags' in source and tag in source['tags']
+        ]

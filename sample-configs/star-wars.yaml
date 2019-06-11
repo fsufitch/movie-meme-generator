@@ -5,12 +5,24 @@ sources:
   sw1:
     video: resources/sw-ep1.mp4
     srt: resources/sw-ep1.srt
+    id: SWEp1
+    tags:
+      - star wars
+      - prequel
   sw2:
     video: resources/sw-ep2.mkv
     srt: resources/sw-ep2.srt
+    id: SWEp2
+    tags:
+      - star wars
+      - prequel
   sw3:
     video: resources/sw-ep3.mp4
     srt: resources/sw-ep3.srt
+    id: SWEp3
+    tags:
+      - star wars
+      - prequel
 
 output:
   filename: output.jpg
