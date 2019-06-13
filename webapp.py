@@ -1,12 +1,12 @@
 import flask, pprint
 from pkg_resources import resource_filename
 from datetime import timedelta
-
+from typing import Tuple
 from moviememes.caption import caption
 from moviememes.config import read_config_file
 from moviememes.context import Context
 from moviememes.logging import build_logger
-from moviememes.timestamp import pick_timestamp, get_timestamp_by_params
+from moviememes.timestamp import get_timestamp_by_params
 from moviememes.screencap import get_screencap
 
 config_file = './movie-meme-config.yaml'
@@ -52,20 +52,13 @@ def meme():
     id = flask.request.args.get('id')
     tag = flask.request.args.get('tag')
 
-    for arg in flask.request.args:
-        if arg not in ALLOWED_PARAMS:
-            response = flask.jsonify({
-                "message": "'{}' is not an allowed path parameter".format(arg)
-            })
-            response.status_code = 400
-            return response
+    params_valid, error_msg = validate_request_params(flask.request.args)
 
-    # Disallow the caller to specify a tag and an ID.
-    if id is not None and tag is not None:
+    if not params_valid:
         response = flask.jsonify({
-            "message": "You must specify an ID or tag, but not both"
+            "message": error_msg
         })
-        response.status_code = 404
+        response.status_code = 400
         return response
 
     # Calculate the timestamp if any elements were included
@@ -92,6 +85,45 @@ def meme():
         })
         response.status_code = 404
         return response
+
+
+def validate_request_params(args) -> Tuple[bool, str]:
+    args.get("hour")
+    ALLOWED_PARAMS = {
+        'hour': int,
+        'minute': int,
+        'second': int,
+        'id': str,
+        'tag': str
+    }
+
+    messages = list()
+
+    # check to make sure that there are no invalid params
+    for arg in args:
+        if arg not in ALLOWED_PARAMS.keys():
+            messages.append("'{}' is not an allowed path parameter.".format(arg))
+
+    # check all types of params that may be present
+    for param, pType in ALLOWED_PARAMS.items():
+        value = args.get(param)
+        if value is not None:
+            # try the conversion
+            try:
+                pType(value)
+            except:
+                messages.append("'{}' is supposed to be of type '{}', but we received '{}'.".format(param, pType.__name__, value))
+
+    # Check if both id and tag are present.
+    id = flask.request.args.get('id')
+    tag = flask.request.args.get('tag')
+    if id is not None and tag is not None:
+        messages.append("You must specify an ID or tag, but not both.")
+
+    if len(messages) > 0:
+        return False, " ".join(messages)
+
+    return True, ""
 
 if __name__ == "__main__":
     app.run(debug=True)
