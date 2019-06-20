@@ -65,7 +65,7 @@ def meme():
     if (hour != None or minute != None or second != None):
         hour = int(hour) if hour is not None else 0
         minute = int(minute) if minute is not None else 0
-        second = int(second) if second is not None else 0
+        second = float(second) if second is not None else 0
         time = timedelta(hours=hour, minutes=minute, seconds=second)
     else:
         time = None
@@ -92,7 +92,7 @@ def validate_request_params(args) -> Tuple[bool, str]:
     ALLOWED_PARAMS = {
         'hour': int,
         'minute': int,
-        'second': int,
+        'second': float,
         'id': str,
         'tag': str
     }
