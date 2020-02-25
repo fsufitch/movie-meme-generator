@@ -8,14 +8,14 @@ verify_ssl = true
 [packages]
 requests = ">=2.20.1"
 pyyaml = ">=4.2b1"
-pillow = ">=5.4.1"
+pillow = ">=7.0.0"
 srt = ">=1.10"
 imgurpython = "*"
 flask = "*"
 uwsgi = "*"
 
 [requires]
-python_version = "3.7"
+python_version = ">=3.7"
 
 [pipenv]
 allow_prereleases = true
