@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve the meme generator
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/movie-meme-generator
+Environment="PATH=/movie-meme-generator/mmgenv/bin"
+ExecStart=/movie-meme-generator/mmgenv/bin/uwsgi --ini meme_generator.ini
+
+[Install]
+WantedBy=multi-user.target

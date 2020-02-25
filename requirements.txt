@@ -1,0 +1,8 @@
+srt==3.0.0
+setuptools==40.8.0
+Flask==1.0.2
+requests==2.21.0
+Pillow==6.2.1
+imgurpython==1.1.7
+typing==3.7.4.1
+PyYAML==5.1.2
