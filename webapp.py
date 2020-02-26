@@ -28,8 +28,15 @@ def hello():
 
 @app.route('/sources')
 def sources():
-    response = flask.make_response(pprint.pformat(config['sources']))
-    response.headers['Content-Type'] = 'text/plain'
+    json_sources = config['sources']
+    stripped_sources = list()
+    for s_key, s in json_sources.items():
+        stripped_sources.append({
+            'id': s.get('id'),
+            'tags': s.get('tags')
+        })
+    response = flask.make_response(pprint.pformat(stripped_sources))
+    response.headers['Content-Type'] = 'application/json'
     return response
 
 @app.route('/meme')
